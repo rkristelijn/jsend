@@ -36,6 +36,104 @@ cd jsend && npm i
 | start   | `npm start -s`                          |
 | test    | `npm test -s` (after server is running) |
 
+# Demo
+
+![](./doc/demo.gif)
+
+# Responses
+
+## /
+
+```json
+{
+  "status": "SUCCESS",
+  "data": {
+    "hello": "world",
+    "api": "http://localhost:3000/api"
+  },
+  "message": "200: OK",
+  "code": 200
+}
+```
+
+## /api
+
+```json
+{
+  "status": "FAIL",
+  "message": "Route '/api' not found",
+  "data": [
+    "400: BAD REQUEST",
+    "Route '/api' not found",
+    {
+      "available": [
+        ["http://localhost:3000/api/users", "http://localhost:3000/api/fail"]
+      ]
+    }
+  ],
+  "code": 400
+}
+```
+
+## /api/users
+
+```json
+{
+  "status": "SUCCESS",
+  "data": {
+    "users": [
+      {
+        "name": "admin",
+        "pass": "admin"
+      },
+      {
+        "name": "system",
+        "pass": "system"
+      },
+      {
+        "name": "henk",
+        "pass": "annie"
+      }
+    ]
+  },
+  "message": "200: OK",
+  "code": 200
+}
+```
+
+## /api/users/henk
+
+```json
+{
+  "status": "SUCCESS",
+  "data": {
+    "user": {
+      "name": "henk",
+      "pass": "annie"
+    }
+  },
+  "message": "200: OK",
+  "code": 200
+}
+```
+
+## /api/fail
+
+I purposely created an error, calling `i_will_crash_on_purpose()` that doesn't exist to see if a proper JSON is returned.
+
+```json
+{
+  "status": "ERROR",
+  "message": "i_will_crash_on_purpose is not defined",
+  "data": [
+    "500: INTERNAL SERVER ERROR",
+    "ReferenceError: i_will_crash_on_purpose is not defined",
+    "at /home/gius/jsend/api/fail/fail-router.js:10:5"
+  ],
+  "code": 500
+}
+```
+
 # Key take-aways
 
 ## npm WARN
@@ -45,6 +143,13 @@ Ignore the WARN per heavily discussed fsevent optional dependency for chokidar (
 ## console.log() vs debug()
 
 Debug comes as a dependency of express. Debug can be tailored at the beginning of every file and filtered while starting the app.
+
+you can use a .env file and [dotenv](https://www.npmjs.com/package/dotenv) or simply add the following to the start script in package.json:
+
+```json
+"scripts": {
+    "start": "PORT=3000 DEBUG=jsend* nodemon ./bin/www"
+```
 
 ## Custom validators in test
 
@@ -56,7 +161,9 @@ The test might as well skip setting up the app in before(). This removes redunda
 
 ## Arrow-functions / lambdas in test
 
-This is not best practice because of this scope is gone. Mocha strongly advices to avoid lambda's in test.
+This is not best practice because of this scope is gone. Mocha strongly [advices to avoid lambda's in test](https://mochajs.org/#arrow-functions):
+
+_Passing arrow functions (aka "lambdas") to Mocha is discouraged. Lambdas lexically bind this and cannot access the Mocha context._
 
 # Sources
 

@@ -1,0 +1,4 @@
+// {type:class}
+// {direction:topDown}
+
+[jsend||success();fail();error()]

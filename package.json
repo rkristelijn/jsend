@@ -1,0 +1,25 @@
+{
+  "name": "jsend",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "PORT=3000 DEBUG=jsend* nodemon ./bin/www",
+    "test": "mocha './{,!(node_modules)/**}/*.spec.js'"
+  },
+  "dependencies": {
+    "express": "~4.16.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules/*",
+      "doc/*",
+      "img/*",
+      "*.md"
+    ]
+  }
+}
